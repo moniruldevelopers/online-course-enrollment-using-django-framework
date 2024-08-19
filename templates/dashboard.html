@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock title %}
+
+
+{% block content %}
+
+<div class="container " style="margin-top: 130px; list-style: none;">
+  <div class="shadow-sm" style="padding: 5px; text-align: center;">
+    <li>Name: {{request.user.username}}</li>  
+    <li>Email: {{request.user.email}}</li>
+   
+  </div>
+ 
+ <section>
+    <h1 style="text-align: center; margin-top:10px;">Enrolled Courses</h1>
+    <div class="row "> 
+        {% if user_enrollments %}
+        <ul>
+            <div class="row">  
+            {% for enrollment in user_enrollments reversed %}
+             <div class="col-lg-3 ">
+                <div class="course-box d-flex aos" data-aos="fade-up">
+                    <div class="product shadow-lg">
+                    <div class="product-img">
+                        <a href="{% url 'course_playlist' course_slug=enrollment.course.slug %}">
+                        <img
+                            class="img-fluid"
+                            alt
+                            src="{{enrollment.course.banner.url}}"
+                        />
+                        </a>
+                        <div class="price">
+                        <h3>{{enrollment.course.price}}&#2547;</h3>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <div class="course-group d-flex">                      
+                        <div class="course-group-img d-flex">
+                            {% if enrollment.course.author.slug %}
+                                <a href="{% url 'author_details' enrollment.course.author.slug %}">
+                                    <img src="{{ enrollment.course.author.image.url }}" alt="{{ enrollment.course.author.name }}" class="img-fluid" />
+                                </a>
+                                <div class="course-name">
+                                    <h4>
+                                        <a href="{% url 'author_details' enrollment.course.author.slug %}">{{ enrollment.course.author.name }}</a>
+                                    </h4>
+                                    <p>{{ enrollment.course.author.designation }}</p>
+                                </div>
+                            {% else %}
+                                <!-- Handle the case where author.slug is empty or None -->
+                                <img src="{{ enrollment.course.author.image.url }}" alt="{{ enrollment.course.author.name }}" class="img-fluid" />
+                                <div class="course-name">
+                                    <h4>{{ enrollment.course.author.name }}</h4>
+                                    <p>{{ enrollment.course.author.designation }}</p>
+                                </div>
+                            {% endif %}
+                        </div>                        
+                    </div>
+                        <h3 class="title instructor-text">
+                        <a href="{% url 'course_playlist' course_slug=enrollment.course.slug %}"
+                            >{{enrollment.course.title}}</a
+                        >
+                        </h3>
+                        <div class="course-info d-flex align-items-center">
+                        <div class="rating-img d-flex align-items-center">
+                            <img
+                            src="{% static 'assets/img/icon/icon-01.svg' %}"
+                            alt
+                            />
+                            <p>{{enrollment.course.videos.all.count }} Lessons </p>
+                        </div>
+                        <div class="course-view d-flex align-items-center">
+                            <img
+                            src="{% static 'assets/img/icon/icon-02.svg' %}"
+                            alt
+                            />
+                            <p>{{enrollment.course.duration}} Hours</p>
+                        </div>
+                        </div>                 
+                    
+                    </div>
+                    </div>
+                </div>
+            </div>        
+            {% endfor %}           
+        </div> 
+          </ul>
+        {% else %}
+          <p>You are not currently enrolled in any courses.</p>
+        {% endif %}
+      </div>
+     
+     
+ </section>
+</div>
+
+
+
+
+{% endblock content %}
+    

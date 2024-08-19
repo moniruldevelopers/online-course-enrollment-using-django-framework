@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Courses List
+{% endblock title %}
+
+
+{% block content %}
+
+
+
+
+
+<section class="section new-course">
+  <div class="container">   
+    <div class="row" style="padding-top: 60px;">
+      <div class="col-md-6">
+        <div class="section-sub-head">    
+          <h2>Featured Courses ({{total_course}})</h2>
+        </div>
+      </div>
+      <div class="col-md-6 ">
+        <form class="form-inline shadow-sm" method="GET" action="{% url 'search' %}">
+          <div class="input-group align-items-stretch">
+              <input type="text" class="form-control" placeholder="Search Course, Category, Author, etc" name="search">
+              <div class="input-group-append">
+                  <button style="line-height: 2;" class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+              </div>
+          </div>
+      </form>
+      </div>
+    </div>   
+  
+    <div class="course-feature">
+      <div class="row">
+        {% for course in courses %}
+     
+        {% include 'course_card.html' %}   
+        {% endfor %}
+    </div>
+    {% include 'pagination.html' %}  
+  </div>
+</section>
+{% endblock content %}
+    
+

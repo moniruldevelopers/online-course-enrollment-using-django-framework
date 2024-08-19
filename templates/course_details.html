@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Course Details
+{% endblock title %}
+
+
+{% block content %}
+
+
+<div class="inner-banner" style="margin-top: 150px ;">
+  {% if messages %}
+      {% include 'message.html' %}
+      {% endif %}
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="instructor-wrap border-bottom-0 m-0">
+            <div class="about-instructor align-items-center">
+              <div class="abt-instructor-img">
+                <a href="instructor-profile.html"
+                  ><img
+                    src="{{course.author.image.url}}"
+                    alt="{{course.author.name}}"
+                    class="img-fluid"
+                /></a>
+              </div>
+              <div class="instructor-detail me-3">
+                <h5><a href="instructor-profile.html">{{course.author.name}}</a></h5>
+                <p>{{course.author.designation}}</p>
+              </div>
+            
+            </div>
+            <span class="web-badge mb-3">{{course.category}}</span>
+          </div>
+          <h2>{{course.title}}</h2>
+         
+          <div
+            class="course-info d-flex align-items-center border-bottom-0 m-0 p-0"
+          >
+            <div class="cou-info">
+              <img src="{% static 'assets/img/icon/icon-01.svg' %}" alt />
+              <p>{{course.videos.all.count }} Lessons</p>
+            </div>
+            <div class="cou-info">
+              <img src="{% static 'assets/img/icon/timer-icon.svg' %}" alt />
+              <p>{{course.duration}} Hours</p>
+            
+            </div>
+            <p><i class="fa fa-upload"></i> {{course.created_date}}</p>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="page-content course-sec">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="card overview-sec">
+            <div class="card-body">
+              <p>{{course.course_details|safe}}</p>
+              
+            </div>
+          </div>
+
+          <div class="card content-sec">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h5 class="subs-title">Course Content</h5>
+                </div>
+                <div class="col-sm-6 text-sm-end">
+                  <h6>{{course.videos.all.count }} Lectures {{course.duration}} Hours</h6>
+                </div>
+              </div>
+              <div class="course-card">
+                <!-- courses/detail.html -->
+
+                {% if user.is_authenticated %}
+                {% if enrollments.exists %}
+                  {% if enrollments.first.approved %}
+                    <ul>
+                      {% for video in course.videos.all %}
+                        <li>
+                          <p>
+                            <img src="{% static 'assets/img/icon/play.svg' %}" alt class="me-2" />
+                            {{ video.title }}
+                          </p>
+                          <div>                            
+                            <a href="{% url 'dashboard' %}" title="Go To your Enrolled Course " class="video-watch">Go to dashboard</a>
+                          </div>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% else %}
+                    <p>Your enrollment is pending approval. Please wait for approval to access the videos.</p>
+                  {% endif %}
+                {% else %}
+                  <ul>
+                    {% for video in course.videos.all %}
+                      <li>
+                        <p>
+                          <img src="{% static 'assets/img/icon/play.svg' %}" alt class="me-2" />
+                          {{ video.title }}
+                        </p>
+                        {% if video.is_preview %}
+                          <div>
+                            <a style="text-decoration: none;" href="javascript:;" class="video-preview" data-src="{{ video.video_file.url }}">Preview <i class="fa fa-unlock"></i></a>
+                          </div>
+                        {% else %}
+                          <div>
+                           <a href="javascript:;" title="please enroll this course to view"><i class="fa fa-lock"></i></a>
+                          </div>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              {% endif %}
+              
+
+              </div>             
+            </div>
+          </div>       
+        </div>
+
+
+
+
+<!-- right side bar  -->
+        <div class="col-lg-4">
+          <div class="sidebar-sec">
+            <div class="video-sec vid-bg">
+              <div class="card">
+                <div class="card-body">
+                  <a>
+                     <img class src="{{course.banner.url}}" alt="{{course.title}}" />
+                  </a>
+                  <div class="video-details">
+                    <div class="course-fee">
+                      <h2>Price: {{ course.price|default:"Free" }} &#2547; </h2>                   
+                    </div>
+                    <div class="row gx-2">
+                      <div class="col-md-6">
+                        <a
+                          href="{% url 'add_to_wishlist' slug=course.slug %}"
+                          class="btn btn-wish w-100"
+                          ><i class="feather-heart"></i> Add to Wishlist <i class="fa fa-bookmark"></i></a
+                        >
+
+                      </div>
+                      <div class="col-md-6">
+                        <a id="copyLinkBtn" href="javascript:;" class="btn btn-wish w-100"
+                          ><i class="feather-share-2"></i> Copy Link <i class="fa fa-share"></i></a
+                        >
+                        <script>
+                          document.getElementById("copyLinkBtn").addEventListener("click", function() {
+                              copyToClipboard(window.location.href);
+                              alert("Link copied to clipboard!");
+                          });
+                      
+                          function copyToClipboard(text) {
+                              var textArea = document.createElement("textarea");
+                              textArea.value = text;
+                              document.body.appendChild(textArea);
+                              textArea.select();
+                              document.execCommand('copy');
+                              document.body.removeChild(textArea);
+                          }
+                      </script> 
+                             
+                                                    
+                           
+                      </div>                      
+                    </div> 
+                    {% if user.is_authenticated %}
+                    {% if enrollments.exists %}
+                      {% for enrollment in enrollments %}
+                        {% if enrollment.approved %}
+                        <a class="btn btn-enroll w-100" href="{% url 'course_playlist' course_slug=enrollment.course.slug %}">Already Enrolled (View Course)</a>
+
+                        {% elif not enrollment.approved %}
+                          <button class="btn btn-primary">Your enrollment request is pending approval.</button>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <a class="btn btn-enroll w-100" href="{% url 'enroll' slug=course.slug %}">Enroll in this course</a>
+                     
+                    {% endif %}
+                  {% else %}
+                    <a href="{% url 'login' %}">Log in</a> to enroll in this course.
+                  {% endif %}              
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+
+            <div class="card feature-sec">
+              <div class="card-body">
+                <div class="cat-title">
+                  <h4>Includes</h4>
+                </div>
+                <ul>
+                  <li>
+                    <img src="{% static 'assets/img/icon/users.svg' %}" class="me-2" alt />
+                    Enrolled: <span>{{total_enrolled_students}}</span>
+                  </li>
+                  <li>
+                    <img src="{% static 'assets/img/icon/timer.svg' %}" class="me-2" alt />
+                    Durations: <span>{{course.duration}} Hours</span>
+                   
+                  </li>              
+                  <li>
+                    <img src="{% static 'assets/img/icon/video.svg' %}" class="me-2" alt />
+                    Video:<span> {{course.videos.all.count }} Lessons</span>
+                  </li>
+                  <li>
+                    <img src="{% static 'assets/img/icon/chart.svg' %}" class="me-2" alt />
+                    Level: <span>{{course.skill_level}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Related Courses Section -->
+         
+            <div class="card feature-sec">
+              <div class="card-body">
+                  <div class="cat-title">
+                      <h4>Related Courses</h4>
+                  </div>
+                  {% if related_courses %}
+                      <div class="list-group">
+                          {% for related_course in related_courses %}
+                              <a href="{% url 'course_details' slug=related_course.slug %}" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" style="height: 80px;">
+                                  <div class="d-flex align-items-center">
+                                      <img src="{{ related_course.banner.url }}" alt="{{ related_course.title }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; transition: transform 0.3s;">
+                                      <p class="mb-0 ms-2" style="font-size: 12px;">{{ related_course.title }}</p>
+                                  </div>
+                              </a>
+                          {% endfor %}
+                      </div>
+                  {% else %}
+                      <p>No related courses found.</p>
+                  {% endif %}
+              </div>
+          </div>
+          
+          
+          
+          
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+<!-- Bootstrap CSS and JS -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+<!-- Video Modal and JavaScript -->
+<div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="videoModalLabel">Video Preview {{video.title}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <video controls id="previewVideo" width="100%" height="auto">
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('.video-preview').on('click', function() {
+            var videoUrl = $(this).data('src');
+            $('#previewVideo source').attr('src', videoUrl);
+            $('#previewVideo')[0].load();
+            $('#previewVideo')[0].play();
+            $('#videoModal').modal('show');
+        });
+
+        $('#videoModal').on('hidden.bs.modal', function () {
+            $('#previewVideo')[0].pause();
+            $('#previewVideo source').attr('src', '');
+        });
+    });
+
+    
+</script>
+
+
+  
+{% endblock content %}
+    

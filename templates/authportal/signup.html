@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+<title>{% block title %} Ecourse UGV sign up page {% endblock title %}</title>
+
+{% load static %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="margin-top: 110px;">
+    <div class="card p-3" style="border-radius:10px; width:100%; max-width: 400px; background: linear-gradient(to right, #4e54c8, #8f94fb);"> <!-- Gradient background applied -->
+        <h2 class="text-center text-white">Ecourse UGV Sign up</h2> <!-- Changed text color to white -->
+        
+        <form id="signup-form" action="" method="post" style="margin-bottom: 0;">
+            {% if messages %}
+            <ul>
+            {% for message in messages %}
+                <li style="color:red">{{ message }}</li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+            
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username" class="text-white">Username</label> <!-- Changed text color to white -->
+                <input type="text" id="id_username" name="username" class="form-control{% if form.username.errors %} is-invalid{% endif %}" placeholder="jisc.yourname" value="{{ form.username.value|default:'' }}" required>
+                {% if form.username.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.username.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_email" class="text-white">Email</label> <!-- Changed text color to white -->
+                <input type="email" id="id_email" name="email" class="form-control{% if form.email.errors %} is-invalid{% endif %}" placeholder="example@gmail.com" value="{{ form.email.value|default:'' }}" required>
+                {% if form.email.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.email.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password1" class="text-white">Password</label> <!-- Changed text color to white -->
+                <input type="password" id="id_password1" name="password1" class="form-control{% if form.password1.errors %} is-invalid{% endif %}" placeholder="Password" required>
+                {% if form.password1.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.password1.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="id_password2" class="text-white">Confirm Password</label> <!-- Changed text color to white -->
+                <input type="password" id="id_password2" name="password2" class="form-control{% if form.password2.errors %} is-invalid{% endif %}" placeholder="Confirm Password" required>
+                {% if form.password2.errors %}
+                <div class="invalid-feedback">
+                    {% for error in form.password2.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <button id="signup-button" class="btn btn-primary btn-block mt-2" type="submit">
+                Sign up
+                <span id="signup-spinner" class="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true" style="display:none;"></span>
+            </button>
+        </form>
+        <div class="mt-2">
+            <a href="{% url 'login' %}" class="btn btn-link btn-block text-center text-white">Already have an account?</a> <!-- Changed text color to white -->
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('signup-form').addEventListener('submit', function() {
+    document.getElementById('signup-spinner').style.display = 'inline-block';
+    document.getElementById('signup-button').disabled = true;
+});
+</script>
+
+{% endblock content %}

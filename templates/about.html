@@ -1,0 +1,43 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}About Page{% endblock title %} 
+{% block content %}
+
+<div class="container" style="margin-top: 150px;">
+  <h3>About of E-Course UGV</h3>
+  <p>
+    Welcome to E-Course UGV, your gateway to academic excellence and professional growth. At E-Course UGV, we believe in empowering individuals to pursue their educational aspirations with ease and convenience. Our platform offers a seamless enrollment experience, connecting students with a diverse range of courses offered by our esteemed university partners. Whether you're a lifelong learner looking to expand your horizons or a professional seeking to enhance your skill set, E-Course UGV provides the tools and resources you need to succeed. Join us on this journey towards knowledge and opportunity.</p>
+  <h3>Details Our Dedicated Team of Developers</h3>
+  <p>
+    At UGV Courses, our success is fueled by the passion and expertise of our
+    talented team of developers. Committed to crafting a seamless and enriching
+    online learning experience, our developers bring a diverse set of skills and
+    backgrounds to the table.
+  </p>
+  <hr />
+
+    <div class="row">
+      {% for person in teams reversed %}
+            <div class="col-md-6 mb-3 ">
+                <a href="{{ person.fb }}" class="author-card text-decoration-none shadow-lg">
+                    <!-- Left side (Image) -->
+                    <div>
+                        <img src="{{ person.image.url }}" alt="{{ person.name }} Image">
+                    </div>
+
+                    <!-- Right side (Name and Designation) -->
+                    <div class="author-details">
+                        <h3>{{ person.name }}</h3>
+                        <h6>{{ person.designation }}</h6>
+                        <h6><i class="fa-solid fa-phone-volume"></i> {{ person.phone_number }}</h6>
+                        <h6><i class="fa-solid fa-envelope"></i> {{ person.email }} </h6>
+                        <span><i class="fa-brands fa-facebook"></i> Facebook </span>
+                    </div>
+                </a>
+            </div>
+      {% endfor %}
+    </div>
+</div>
+{% endblock %}

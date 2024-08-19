@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+<title>{% block title %} Confirm Email Sent {% endblock title %}</title>
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    
+<div class="container d-flex justify-content-center align-items-center" style="margin-top: 110px;">
+    <div class="card p-3" style="width: 100%; max-width: 400px; background: linear-gradient(to right, #4e54c8, #8f94fb); border-radius: 10px;"> <!-- Gradient background and border radius applied -->
+        <h2 class="text-center text-white">
+            An email confirmation link has been sent to your Gmail for activation. Please check your inbox.
+        </h2>        
+    </div>
+</div>
+
+{% endblock content %}

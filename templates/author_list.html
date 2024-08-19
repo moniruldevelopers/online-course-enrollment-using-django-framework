@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Teacher's Page{% endblock title %} 
+{% block content %}
+<div class="container" style="margin-top: 150px;">
+    <h1>All Lecturer's ({{ author_count }})</h1>
+    <hr>
+    <div class="row">
+        {% for author in authors  %}
+            <div class="col-md-6 mb-3 ">
+                <a href="{% url 'author_details' author.slug %}" class="author-card text-decoration-none shadow-lg">
+                    <!-- Left side (Image) -->
+                    <div>
+                        <img src="{{ author.image.url }}" alt="{{ author.name }} Image">
+                    </div>
+
+                    <!-- Right side (Name and Designation) -->
+                    <div class="author-details">
+                        <h3>{{ author.name }}</h3>
+                        <h6>{{ author.designation }}</h6>
+                        <h6>{{ author.phone_number }}</h6>
+                        <h6>{{ author.email }} </h6>
+                        <span><i class="fa-solid fa-play fa-sm"></i> Total Courses: {{ author.total_courses }} </span>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

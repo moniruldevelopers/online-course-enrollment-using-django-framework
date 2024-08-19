@@ -1,0 +1,61 @@
+{% load static %}
+
+<section class="section student-course">
+    <div class="container">
+      <div class="course-widget">
+        <div class="row">         
+          <div class="col-lg-4 col-md-6 d-flex">
+            <div class="course-full-width ">
+              <div class="blur-border course-radius aos shadow-sm" data-aos="fade-up">
+               <a href="{% url 'author_list' %}">
+                <div class="online-course d-flex align-items-center">
+                  <div class="course-img">
+                    <img src="{% static 'assets/img/cources-icon.svg' %}" alt />
+                  </div>
+                  <div class="course-inner-content">
+                    <h4><span>{{total_author}}</span></h4>
+                    <p>Expert Tutors</p>
+                  </div>
+                </div>
+               </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 d-flex">
+            <div class="course-full-width">
+              <div class="blur-border course-radius aos shadow-sm" data-aos="fade-up">
+               <a href="{% url 'courses' %}">
+                <div class="online-course d-flex align-items-center">
+                  <div class="course-img">
+                    <img src="{% static 'assets/img/certificate-icon.svg' %}" alt />
+                  </div>
+                  <div class="course-inner-content">
+                    <h4><span>{{total_course}}</span></h4>
+                    <p>Ceritified Courses</p>
+                  </div>
+                </div>
+               </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 d-flex">
+            <div class="course-full-width">
+              <div class="blur-border course-radius aos shadow-sm" data-aos="fade-up">
+                <div class="online-course d-flex align-items-center">
+                  <div class="course-img">
+                    <img src="{% static 'assets/img/gratuate-icon.svg' %}" alt />
+                  </div>
+                  <div class="course-inner-content">
+                    <h4><span>{{total_enrolled_students}}</span></h4>
+                    <p>Online Students</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+

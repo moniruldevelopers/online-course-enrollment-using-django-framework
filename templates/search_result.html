@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <section style="margin-top: 150px;">
+        <h2>Total found {{search_results_count}} results for <i class="fa-brands fa-searchengin"></i>  "{{ search_key }}"</h2>
+    </section>
+
+    <div class="row">
+        {% for course in courses %}
+            {% include 'course_card.html' %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+

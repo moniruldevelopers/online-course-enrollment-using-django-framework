@@ -1,0 +1,61 @@
+{% load static %}
+<section class="home-slide d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="home-slide-face aos" data-aos="fade-up" style="padding-top: 50px;" >
+              
+            <div class=" mt-3 shadow-sm">
+              <form class="form-inline " method="GET" action="{% url 'search' %}">
+                <div class="input-group align-items-stretch">
+                    <input type="text" class="form-control" placeholder="Search Course, Category, Author, etc" name="search">
+                    <div class="input-group-append">
+                        <button style="line-height: 2;" class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>            
+          </div> 
+            <div class="col-md-5 d-flex align-items-center">
+              <div class="girl-slide-img aos" data-aos="fade-up">
+                <img src="{% static 'assets/demo.webp' %}" alt />
+              </div>
+            </div>
+            <div class="home-slide-text">
+              
+              <h5 style="font-size: 30px;">Unlock Your Potential, Learn at Your Pace.</h5>
+            </div>          
+
+            
+            <div class="trust-user">
+              <p>"Ecourse UGV: Unlock Your Potential, Learn at Your Pace. Explore diverse university courses tailored for your success. Empower your journey – start learning on your terms today!"</p>
+              <div class="trust-rating d-flex align-items-center">              
+                
+              </div>
+            </div>
+
+           
+
+            <div class="hero-button py-3" >    
+             
+              
+
+              
+            <ul class="nav header-navbar-rht">
+              <li class="nav-item">
+                <a class="login-head button" href="{% url 'login' %}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="signin-head" href="{% url 'signup' %}">Sign up</a>
+              </li>
+            </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 d-flex align-items-center">
+          <div class="girl-slide-img aos" data-aos="fade-up">
+            <img src="{% static 'assets/hero-01.png' %}" alt />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

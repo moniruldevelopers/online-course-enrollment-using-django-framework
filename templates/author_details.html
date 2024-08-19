@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Home Page
+{% endblock title %}
+
+{% block content %}
+<style>
+    .author-profile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 150px;
+    }
+
+    .author-profile img {
+        width: 150px;
+        height: 150px;
+        border-radius: 10%;
+        margin-right: 20px;
+    }
+
+    .author-details {
+        flex-grow: 1;
+    }
+
+    @media (max-width: 768px) {
+        .author-profile {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .author-profile img {
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+<div class="container">
+
+    <div class="author-profile shadow-lg p-2 " style="border-radius: 10px;"> 
+        <!-- Left side (Image) -->
+        <div>
+            <img src="{{ author.image.url }}" alt="{{ author.name }} Image">
+        </div>
+
+        <!-- Right side (Name and Designation) -->
+        <div class="author-details">
+            <h1 style="font-size: 24px; margin-bottom: 10px;">{{ author.name }}</h1>
+            <h6 style="font-size: 18px; color: #777;">{{ author.designation }}</h6>
+            <h6>{{ author.phone_number }}</h6>
+            <h6>{{ author.email }} </h6>
+        </div>
+    </div>
+    <hr>
+
+    {% if courses %}
+        <h2>Courses by {{ author.name }}</h2>
+        <div class="row">
+            {% for course in courses %}                  
+            {% include 'course_card.html' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No courses available by {{ author.name }}</p>
+    {% endif %}
+
+</div>
+{% endblock content %}

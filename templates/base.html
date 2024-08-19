@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+ 
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=0"
+    />
+    <title>
+    {% block title %}
+      
+    {% endblock title %}
+      </title>
+   
+    <link rel="icon" href="{% static 'assets/img/myimg/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'assets/img/myimg/favicon.ico' %}" type="image/x-icon">
+
+
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/fontawesome.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/fontawesome/css/all.min.css' %}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/css/owl.carousel.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/css/owl.theme.default.min.css' %}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/slick/slick.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/slick/slick-theme.css' %}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{% static 'assets/plugins/select2/css/select2.min.css' %}"
+    />
+
+    <link rel="stylesheet" href="{% static 'assets/plugins/aos/aos.css' %}" />
+
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}" />
+
+  </head>
+  <body>
+    <!-- oncontextmenu="return false;" -->
+    <div class="main-wrapper">
+
+      {% include 'header.html' %}      
+
+      <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-up"></i> Top</button>
+      {% block content %}
+        
+      {% endblock content %}
+        
+    
+
+     
+
+   
+
+
+
+
+
+
+
+
+   
+   
+      {% include 'footer.html' %}
+   
+    </div>
+
+
+
+    <script>
+      // Get the button
+      let mybutton = document.getElementById("myBtn");
+      
+      // When the user scrolls down 20px from the top of the document, show the button
+      window.onscroll = function() {scrollFunction()};
+      
+      function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+          mybutton.style.display = "block";
+        } else {
+          mybutton.style.display = "none";
+        }
+      }
+      
+      // When the user clicks on the button, scroll to the top of the document
+      function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      }
+      </script>
+
+
+   
+    <script src="{% static 'assets/js/jquery-3.6.0.min.js' %}"></script>
+
+    <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="{% static 'assets/js/jquery.waypoints.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.counterup.min.js' %}"></script>
+
+    <script src="{% static 'assets/plugins/select2/js/select2.min.js' %}"></script>
+
+    <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+
+    <script src="{% static 'assets/plugins/slick/slick.js' %}"></script>
+
+    <script src="{% static 'assets/plugins/aos/aos.js' %}"></script>
+
+    <script src="{% static 'assets/js/script.js' %}"></script>
+  </body>
+
+  <!-- Mirrored from dreamslms.dreamguystech.com/html/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 14 Oct 2023 07:00:00 GMT -->
+</html>

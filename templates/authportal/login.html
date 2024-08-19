@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+<title>{% block title %} Alumni log in page {% endblock title %}</title>
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="margin-top: 110px;">
+    <div class="card p-4" style="width: 100%; max-width: 400px; background: linear-gradient(to right, #4e54c8, #8f94fb); border-radius: 10px;"> <!-- Gradient background and border radius applied -->
+        <h2 class="text-center text-white">Ecourse UGV Log In <i class="fa-solid fa-lock"></i></h2>
+        
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li style="color:red">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        <form id="login-form" action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="email" class="text-white">Email</label> <!-- Changed text color to white -->
+                <input type="email" id="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password" class="text-white">Password</label> <!-- Changed text color to white -->
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            <button id="login-button" class="btn btn-primary btn-block mt-2" type="submit">
+                Log in
+                <span id="spinner" class="spinner-border spinner-border-sm ml-2" role="status" aria-hidden="true" style="display:none;"></span>
+            </button>
+        </form>
+        
+        <div class="text-center mt-1">
+            <p class="text-white">Don't have an account?</p> <!-- Changed text color to white -->
+            <a href="{% url 'signup' %}" class="btn btn-warning btn-block">Sign up</a>
+        </div>
+
+        <br>
+        <a href="{% url 'password_reset' %}" class="btn btn-link btn-block text-center text-white">Forgot password?</a> <!-- Changed text color to white -->
+    </div>
+</div>
+
+<script>
+document.getElementById('login-form').addEventListener('submit', function() {
+    document.getElementById('spinner').style.display = 'inline-block';
+    document.getElementById('login-button').disabled = true;
+});
+</script>
+
+{% endblock content %}

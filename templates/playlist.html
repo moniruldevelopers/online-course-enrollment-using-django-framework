@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    Course Playlist
+{% endblock title %}
+
+
+{% block content %}
+
+<style>
+    *{
+    margin: 0; 
+    padding: 0;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: normal;
+     
+}
+body{
+    background: #eee;
+    
+
+}
+.heading{
+    color:#444;
+    font-size: 40px;
+    text-align: center;
+    padding: 10px;
+
+}
+.container{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    
+    gap: 5px;
+    
+    /* align-items: flex-start;
+    padding: 5px 5%; */
+
+}
+.container .main-video{
+    background:#fff;
+    border-radius: 5px;
+    padding: 10px;
+    
+}
+
+.container .main-video video{
+    width: 100%;
+    border-radius: 5px;  
+
+}
+
+.container .main-video .title{
+    color: #333;
+    font-size: 23px;
+    padding-top: 15px ;
+    padding-bottom: 15px ;
+}
+
+.container .video-list{
+    background-color: #fff;
+    border-radius: 5px;
+    height: 556px;
+    overflow-y: scroll;
+}
+
+.container .video-list::-webkit-scrollbar{
+    width: 15px;
+}
+.container .video-list::-webkit-scrollbar-track{
+    background: #1F1944;
+    border-radius: 50px;
+}
+.container .video-list::-webkit-scrollbar-thumb{
+    background: linear-gradient(to right, red, #1F1944);
+    border-radius: 50px;
+
+}
+.container .video-list .vid video{
+    width: 100px;
+    border-radius: 5px;
+}
+.container .video-list .vid{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #f7f7f7;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+    border:1px solid rgb(237, 236, 236);
+    cursor: pointer;
+
+}
+.container .video-list .vid:hover{
+    background: #eee;    
+}
+
+.container .video-list .vid.active{
+    background: #2980b9  ;    
+}
+
+.container .video-list .vid.active .title{
+    color:#fff;   
+}
+
+.container .video-list .vid .title{
+    color:#333; 
+    font-size: 17px;  
+}
+
+@media(max-width:991px)
+{ 
+    .container{
+        grid-template-columns: 1.5fr 1fr;
+        padding: 10px;    
+    }
+}
+@media (max-width: 768px) {
+    .container {
+        display: block;
+    }
+    .main-video {
+        position: sticky;
+        top: 60px; 
+        z-index: 1;     
+    }
+    .video-list {
+        margin-top: 10px; 
+    }
+}
+
+</style>
+<div class="container"  >
+    <p style="margin-top: 110px;">Course Playlist <img src="{% static 'assets/img/icon/video.svg' %}" class="me-2" alt=""> {{course.title}}</p>
+</div>  
+<div class="container myvideo" style="margin-bottom: 50px;">
+    <div class="main-video">
+        <div class="video">
+            <video oncontextmenu="return false;" id="mainVideo" controls  autoplay></video>
+                           
+            <h3 id="mainVideoTitle" class="title">
+                {% if video_clicked %}
+                    {{ video_title }}
+                {% else %}
+                Click the Listed Video To View
+                {% endif %}
+            </h3>
+                
+            <div class="controls">
+                <button class="btn btn-success" id="skipBackward" onclick="skipVideo(-10)"><i class="fa-solid fa-backward"></i></button>
+                <button class="btn btn-danger" id="togglePlayPause">
+                    <i id="playPauseIcon" class="fa-solid"></i> Pause/Play
+                </button>
+                <button class="btn btn-success" id="skipForward" onclick="skipVideo(10)"><i class="fa-solid fa-forward"></i></button>
+                <button class="btn btn-warning" id="fastForward" onclick="changePlaybackRate(2)"><i class="fa-solid fa-forward-fast"></i></button>
+                        <!-- Fullscreen Button -->
+                <button class="btn btn-danger" id="fullscreenButton"><i class="fa-solid fa-expand"></i></button>
+
+                <!-- Picture-in-Picture Button -->
+                <button class="btn btn-info" id="pipButton"><i class="fa-solid fa-minimize"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="video-list ">
+        {% for video in course.videos.all %}
+            <div class="vid{% if forloop.first %} active{% endif %}">
+                <video oncontextmenu="return false;" class="playlist-video" src="{{ video.video_file.url }}" muted></video>
+                               
+                <h3 class="title">{{ forloop.counter }}. {{ video.title }}</h3>
+                
+              </div>
+          <ol>
+            <li style="list-style-type: none;">               
+                {% if video.class_file.size > 0 %}
+                <img src="{% static 'assets/img/icon/chapter.svg' %}" class="me-2" alt=""> <a href="{{video.class_file.url}}">Download {{ forloop.counter }} Lecture file</a><br>
+                {% endif %}
+                </li>
+                
+                {% if video.assignment %}
+                <img src="{% static 'assets/img/icon/cloud.svg' %}" class="me-2" alt=""><a href="{{video.assignment.url}}">Assignment of Lecture {{ forloop.counter }}   </a><br>
+                {% endif %}
+
+                {% if video.quiz %}
+                <img src="{% static 'assets/img/icon/key.svg' %}" class="me-2" alt=""><a href="{{video.quiz}}">Quiz of Lecture {{ forloop.counter }}</a>
+                {% endif %}                    
+          </ol>
+        {% endfor %}
+    </div>
+</div>
+
+
+<script>
+    let listVideo = document.querySelector('.video-list');
+    let mainVideo = document.querySelector('.main-video video');
+    let title = document.querySelector('.main-video .title');
+    let playbackRateOptions = [1.0, 1.25, 1.5, 2.0];
+    let playbackRateIndex = 0; // Initial index for playback rate
+
+    listVideo.addEventListener('click', (event) => {
+        let clickedVideo = event.target.closest('.vid');
+        if (!clickedVideo) return;
+
+        listVideo.querySelectorAll('.vid').forEach(vid => vid.classList.remove('active'));
+        clickedVideo.classList.add('active');
+
+        if (clickedVideo.classList.contains('active')) {
+            let src = clickedVideo.querySelector('video').getAttribute('src');
+            mainVideo.src = src;
+            let text = clickedVideo.querySelector('.title').innerHTML;
+            title.innerHTML = text;
+        }
+    });
+
+    function skipVideo(seconds) {
+        mainVideo.currentTime += seconds;
+    }
+
+    let playPauseIcon = document.getElementById('playPauseIcon');
+    let videoLoaded = false; // To track whether the video metadata has been loaded
+
+    // Function to initialize the video and set event listeners
+    function initializeVideo() {
+        mainVideo.addEventListener('canplay', function () {
+            // Set initial icon based on video state after metadata is loaded
+            updatePlayPauseIcon();
+            videoLoaded = true;
+        });
+
+        mainVideo.addEventListener('timeupdate', function () {
+            // Update Play/Pause icon during playback
+            updatePlayPauseIcon();
+        });
+    }
+
+    // Initial setup
+    initializeVideo();
+
+    function updatePlayPauseIcon() {
+        if (mainVideo.paused) {
+            playPauseIcon.classList.remove('fa-pause');
+            playPauseIcon.classList.add('fa-play');
+        } else {
+            playPauseIcon.classList.remove('fa-play');
+            playPauseIcon.classList.add('fa-pause');
+        }
+    }
+
+    function togglePlayback() {
+        if (!videoLoaded) {
+            return; // If the video metadata hasn't loaded, do nothing
+        }
+
+        if (mainVideo.paused) {
+            mainVideo.play();
+        } else {
+            mainVideo.pause();
+        }
+
+        // Update Play/Pause icon immediately after user interaction
+        updatePlayPauseIcon();
+    }
+
+    // Function to change the video source and reinitialize
+    function changeVideoSource(newSource) {
+        mainVideo.src = newSource;
+        videoLoaded = false;
+        initializeVideo();
+        mainVideo.load();
+        mainVideo.play();
+    }
+
+    function changePlaybackRate() {
+        playbackRateIndex = (playbackRateIndex + 1) % playbackRateOptions.length;
+        mainVideo.playbackRate = playbackRateOptions[playbackRateIndex];
+    }
+
+    // Attach event listeners to buttons
+    document.getElementById('skipBackward').addEventListener('click', () => skipVideo(-10));
+    document.getElementById('skipForward').addEventListener('click', () => skipVideo(10));
+    document.getElementById('fastForward').addEventListener('click', changePlaybackRate);
+    document.getElementById('togglePlayPause').addEventListener('click', togglePlayback);
+
+    // Add Fullscreen and Picture-in-Picture buttons
+    let fullscreenButton = document.getElementById('fullscreenButton');
+    let pipButton = document.getElementById('pipButton');
+
+    fullscreenButton.addEventListener('click', toggleFullscreen);
+    pipButton.addEventListener('click', togglePictureInPicture);
+
+    // Function to toggle fullscreen
+    function toggleFullscreen() {
+        if (mainVideo.requestFullscreen) {
+            mainVideo.requestFullscreen();
+        } else if (mainVideo.mozRequestFullScreen) {
+            mainVideo.mozRequestFullScreen();
+        } else if (mainVideo.webkitRequestFullscreen) {
+            mainVideo.webkitRequestFullscreen();
+        } else if (mainVideo.msRequestFullscreen) {
+            mainVideo.msRequestFullscreen();
+        }
+    }
+
+    // Function to toggle Picture-in-Picture mode
+    function togglePictureInPicture() {
+        if (document.pictureInPictureElement) {
+            document.exitPictureInPicture();
+        } else {
+            mainVideo.requestPictureInPicture();
+        }
+    }
+</script>
+
+{% endblock content %}
+    

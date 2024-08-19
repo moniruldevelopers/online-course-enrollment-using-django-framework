@@ -1,0 +1,99 @@
+{% extends 'base.html' %} {% load static %} 
+{% block title %} Saved Courses Page{% endblock title %} {% block content %}
+
+<div class="container py-5" style="margin-top: 100px;">
+  <div>{% if messages %} {% include 'message.html' %} {% endif %}</div>
+
+  <div class="saved-courses-heading">
+    <h2>{{ user.username }}'s Saved Courses <i class="fa fa-bookmark"></i></h2>
+    <p>Number of Saved Courses: {{ wishlist.courses.count }}</p>
+  </div>
+  <hr />
+  {% if wishlist %}
+  <div class="row">
+    {% for course in wishlist.courses.all %}
+    <div class="col-lg-4 col-md-6 d-flex" >
+        <div  class="course-box d-flex aos shadow-lg" data-aos="fade-up" >
+          <div class="product" >
+            <div class="product-img">
+              <a href="{% url 'course_details' course.slug %}">
+                <img
+                  class="img-fluid"
+                  style="width: 380px; height: 255px"
+                  alt="{{course.title}}"
+                  src="{{course.banner.url}}"
+                />
+              </a>
+              <div class="price">
+                <h3>{{ course.price|default:"Free" }} &#2547;</h3>
+              </div>
+            </div>
+            <div class="product-content">
+              <div class="course-group d-flex">
+                <div class="course-group-img d-flex">
+                  {% if course.author.slug %}
+                  <a href="{% url 'author_details' course.author.slug %}">
+                    <img
+                      src="{{ course.author.image.url }}"
+                      alt="{{ course.author.name }}"
+                      class="img-fluid"
+                    />
+                  </a>
+                  <div class="course-name">
+                    <h4>
+                      <a href="{% url 'author_details' course.author.slug %}"
+                        >{{ course.author.name }}</a
+                      >
+                    </h4>
+                    <p>{{ course.author.designation }}</p>
+                  </div>
+                  {% else %}
+                  <!-- Handle the case where author.slug is empty or None -->
+                  <img
+                    src="{{ course.author.image.url }}"
+                    alt="{{ course.author.name }}"
+                    class="img-fluid"
+                  />
+                  <div class="course-name">
+                    <h4>{{ course.author.name }}</h4>
+                    <p>{{ course.author.designation }}</p>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+  
+              <h3 class="title instructor-text">
+                <a href="{% url 'course_details' course.slug %}"
+                  >{{course.title}}</a
+                >
+              </h3>
+              <div class="course-info d-flex align-items-center">
+                <div class="rating-img d-flex align-items-center">
+                  <img src="{% static 'assets/img/icon/icon-01.svg' %}" alt />
+                  <p>{{course.videos.all.count }} Lessons</p>
+                </div>
+                <div class="course-view d-flex align-items-center">
+                  <img src="{% static 'assets/img/icon/icon-02.svg' %}" alt />
+                  <p>{{course.duration}} Hours</p>
+                </div>
+              </div>
+            </div>
+            <div class="wishlist-actions">
+              <a
+                href="{% url 'remove_from_wishlist' slug=course.slug %}"
+                class="btn btn-danger"
+                ><i class="fa fa-trash"></i> Remove</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+<div class="row">
+    <p>No Courses in the wishlist.</p>
+</div>
+{% endif %}
+</div>
+{% endblock %}
